@@ -1,8 +1,8 @@
 'use client';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
-import GoogleLogo from './Icons/google';
-import { Icons } from './Icons/icons';
+import GoogleLogo from '../Icons/google';
+import { Icons } from '../Icons/icons';
 
 export default function UserAuthForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -13,7 +13,7 @@ export default function UserAuthForm() {
   }
 
   return (
-    <div>
+    <div className={'grid gap-6'}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -42,7 +42,7 @@ export default function UserAuthForm() {
             disabled={isLoading}
           >
             {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin fill-white" />
             )}
             Sign In with Email
           </button>
