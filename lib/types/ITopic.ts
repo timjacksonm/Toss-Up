@@ -1,6 +1,4 @@
-import { ObjectId } from 'mongodb';
-
-export interface TestData {
+export interface ITopic {
   _id: string;
   topic: string;
   question: string;
