@@ -1,4 +1,5 @@
-import './globals.css';
+import 'styles/globals.css';
+import ProvidersWrapper from 'components/ProvidersWrappers';
 
 export default function RootLayout({
   children,
@@ -12,7 +13,9 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className="bg-gray-900">{children}</body>
+      <body className="bg-gray-900">
+        <ProvidersWrapper>{children}</ProvidersWrapper>
+      </body>
     </html>
   );
 }
