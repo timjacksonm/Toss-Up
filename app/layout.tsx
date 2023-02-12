@@ -1,5 +1,5 @@
+import SessionWrapper from 'components/SessionWrapper';
 import 'styles/globals.css';
-import ProvidersWrapper from 'components/ProvidersWrappers';
 
 export default function RootLayout({
   children,
@@ -14,7 +14,7 @@ export default function RootLayout({
       */}
       <head />
       <body className="bg-gray-900">
-        <ProvidersWrapper>{children}</ProvidersWrapper>
+        <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
   );
