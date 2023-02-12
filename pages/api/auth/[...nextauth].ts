@@ -1,7 +1,7 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthOptions } from 'next-auth';
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 
-export default NextAuth({
+export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
@@ -19,4 +19,6 @@ export default NextAuth({
       return false; // Currently sends to error.tsx page
     },
   },
-});
+};
+
+export default NextAuth(authOptions);
