@@ -5,10 +5,10 @@ import { getCurrentUser } from 'utils/session';
 import { pages } from 'utils/pages';
 
 export default async function DashboardHome() {
-  const user = getCurrentUser();
+  const user = await getCurrentUser();
 
   if (!user) {
-    redirect(pages.signIn);
+    redirect(pages.login);
   }
 
   return (

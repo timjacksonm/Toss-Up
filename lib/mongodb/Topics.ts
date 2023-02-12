@@ -1,5 +1,5 @@
 import 'server-only';
-import { TestData } from 'lib/types/ITopic';
+import { ITopic } from 'lib/types/ITopic';
 import client from 'utils/mongoclient';
 
 if (!process.env.DB_NAME) {
@@ -17,7 +17,7 @@ const collection = database.collection(collectionName);
 
 export async function getData() {
   const questions = await collection
-    .find<TestData>({ topic: 'animals' })
+    .find<ITopic>({ topic: 'animals' })
     .limit(10)
     .toArray();
 

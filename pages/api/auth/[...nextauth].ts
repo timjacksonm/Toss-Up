@@ -1,4 +1,5 @@
-import NextAuth, { AuthOptions } from 'next-auth';
+import { Users } from 'lib/mongodb/Users';
+import NextAuth, { AuthOptions, Account } from 'next-auth';
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 
 export const authOptions: AuthOptions = {
@@ -12,11 +13,46 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ account, profile }) {
-      const { email_verified } = profile as GoogleProfile;
-      if (account?.provider === 'google' && email_verified) {
+      if (account?.type === 'oauth')
+        switch (account?.provider) {
+          case 'google':
+            const { email_verified } = profile as GoogleProfile;
+            if (!email_verified) {
+              return false;
+            }
+            // Note: probably not correct to use direct db calls here and should use api calls to db. This is the client side still.
+            // when nextjs switches the api folder under app I should add "server-only" at top of mongodb query file.
+            const user = await Users.findOne(profile);
+            if (user) {
+              //probably add some sort of token validation here by quering the db
+              return true;
+            }
+            //if no user profile found create one
+            const created = await Users.createUserProfile({
+              account,
+              profile,
+            });
+            if (created) {
+              return true;
+            } else {
+              return false;
+            }
+
+            break;
+
+          default:
+            break;
+        }
+      if (account?.type === 'email') {
+        //too be added
         return true;
       }
-      return false; // Currently sends to error.tsx page
+      if (account?.type === 'credentials') {
+        //too be added
+        return true;
+      }
+
+      return false; // Default sends to error.tsx page
     },
   },
 };
