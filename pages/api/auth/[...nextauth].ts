@@ -23,12 +23,8 @@ export const authOptions: AuthOptions = {
       const user = await Users.findOne(email);
 
       if (user && email_verified && email) {
-        await Users.updateUser({
-          email,
-          email_verified,
-          given_name,
-          family_name,
-        });
+        const AuthProfile = profile as ProfileExtended;
+        await Users.updateUser(AuthProfile);
         return true;
       }
       return false;
