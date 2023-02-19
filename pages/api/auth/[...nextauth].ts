@@ -1,9 +1,12 @@
-import { Users } from 'lib/mongodb/Users';
-import { IProfileExtended } from 'lib/types/IProfileExtended';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import { prisma } from 'lib/prisma/prisma';
+import { Users } from 'lib/prisma/users';
+import { ProfileExtended } from 'lib/types/IProfile';
 
 export const authOptions: AuthOptions = {
+  adapter: PrismaAdapter(prisma),
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
@@ -13,49 +16,22 @@ export const authOptions: AuthOptions = {
     // ...add more providers here
   ],
   callbacks: {
-    async signIn({ account, profile: OauthProfile }) {
-      if (account?.type === 'oauth')
-        switch (account?.provider) {
-          case 'google':
-            const profile = OauthProfile as IProfileExtended;
-            const { email_verified } = profile;
-            if (!email_verified) {
-              return false;
-            }
-            // Note: probably not correct to use direct db calls here and should use api calls to db. This is the client side still.
-            // when nextjs switches the api folder under app I should add "server-only" at top of mongodb query file.
-            //change to upsert?
-            const user = await Users.findOne(profile);
-            if (user) {
-              //probably add some sort of token validation here by quering the db
-              return true;
-            }
-            //if no user profile found create one
-            const created = await Users.createProfileFromProvider({
-              account,
-              profile,
-            });
-            if (created) {
-              return true;
-            } else {
-              return false;
-            }
+    async signIn({ account, profile }) {
+      const { email_verified, email, given_name, family_name } =
+        profile as ProfileExtended;
 
-            break;
+      const user = await Users.findOne(email);
 
-          default:
-            break;
-        }
-      if (account?.type === 'email') {
-        //too be added
+      if (user && email_verified && email) {
+        await Users.updateUser({
+          email,
+          email_verified,
+          given_name,
+          family_name,
+        });
         return true;
       }
-      if (account?.type === 'credentials') {
-        //too be added
-        return true;
-      }
-
-      return false; // Default sends to error.tsx page
+      return false;
     },
   },
 };
