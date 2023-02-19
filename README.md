@@ -18,7 +18,7 @@
 
 ## About
 
-A would you rather question app. 
+A would you rather question app.
 
 ## Setup
 
@@ -28,6 +28,12 @@ A would you rather question app.
 - npx prisma generate to update schema for changes
 - npm run dev to start application
 
+Helpful vscode extensions:
+
+[Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+[Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)
+[Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
 ## Contribute
 
-Too Be Added...
+To be added...
