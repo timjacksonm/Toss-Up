@@ -31,7 +31,9 @@ A would you rather question app.
 Helpful vscode extensions:
 
 [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+
 [Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)
+
 [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 ## Contribute
