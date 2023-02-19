@@ -4,6 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from 'lib/prisma/prisma';
 import { Users } from 'lib/prisma/users';
 import { ProfileExtended } from 'lib/types/IProfile';
+import { SessionExtended } from 'lib/types/ISession';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -28,6 +29,19 @@ export const authOptions: AuthOptions = {
         return true;
       }
       return false;
+    },
+    async session({ session, user: { email } }) {
+      const updatedSession = session as SessionExtended;
+      if (email) {
+        const user = await Users.findOne(email);
+        updatedSession.user = {
+          ...session.user,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          image: user?.image,
+        };
+      }
+      return updatedSession;
     },
   },
 };

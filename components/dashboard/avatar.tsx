@@ -1,12 +1,17 @@
 'use client';
-import { User } from '@prisma/client';
 import * as Avatar from '@radix-ui/react-avatar';
 import { useEffect, useState } from 'react';
+
+interface AvatarProps {
+  firstName?: string | null;
+  lastName?: string | null;
+  image?: string | null;
+}
 
 export function UserAvatar({
   user: { image, firstName, lastName },
 }: {
-  user: User;
+  user: AvatarProps;
 }) {
   const [initials, setInitials] = useState<string>();
 
