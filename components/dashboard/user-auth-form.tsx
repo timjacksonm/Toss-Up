@@ -8,7 +8,7 @@ export default function UserAuthForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function onSubmit() {
-    // setIsLoading(true)
+    setIsLoading(true);
     // To be added
   }
 
