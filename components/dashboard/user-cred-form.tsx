@@ -1,6 +1,9 @@
 'use client';
+import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
+import { useFormik } from 'formik';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { validateLogin } from 'utils/validate';
 import GoogleLogo from '../Icons/google';
 import { Icons } from '../Icons/icons';
 
@@ -9,14 +12,23 @@ export default function UserAuthForm() {
   const [show, setShow] = useState(false);
   const [validUsername, setValidUsername] = useState(false);
 
-  async function onSubmit() {
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validate: validateLogin,
+    onSubmit,
+  });
+
+  async function onSubmit(values: { username: string; password: string }) {
+    console.log(values);
     setIsLoading(true);
-    // To be added
   }
 
   return (
     <div className={'grid gap-6'}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <label
@@ -27,22 +39,17 @@ export default function UserAuthForm() {
             </label>
             <div className="relative">
               <input
-                id="email"
+                id="username"
                 className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
-                type="email"
+                type="username"
                 autoCapitalize="none"
-                autoComplete="email"
                 autoCorrect="off"
-                name="email"
                 required
                 disabled={isLoading}
+                {...formik.getFieldProps('username')}
               />
               <span className="absolute top-0 right-2 pt-2 pr-2">
-                {!validUsername ? (
-                  <Icons.user className="h-6 w-6" />
-                ) : (
-                  <Icons.userCheck className="h-6 w-6 stroke-green-400" />
-                )}
+                {getValidatedUserIcon(formik, 'username')}
               </span>
             </div>
             <label
@@ -54,20 +61,20 @@ export default function UserAuthForm() {
             <div className="relative">
               <input
                 id="password"
-                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3 pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
                 type={show ? 'text' : 'password'}
-                name="password"
                 required
                 disabled={isLoading}
+                {...formik.getFieldProps('password')}
               />
               <span
                 className="absolute top-0 right-2 cursor-pointer pt-2 pr-2"
                 onClick={() => setShow(!show)}
               >
                 {show ? (
-                  <Icons.eyeOpen className="h-6 w-6" />
+                  <Icons.eyeOpen className="h-6 w-6 bg-white" />
                 ) : (
-                  <Icons.eyeClosed className="h-6 w-6" />
+                  <Icons.eyeClosed className="h-6 w-6 bg-white" />
                 )}
               </span>
             </div>

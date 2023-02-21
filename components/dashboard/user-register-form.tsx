@@ -91,7 +91,7 @@ export default function UserRegisterForm() {
                   formik.errors?.password &&
                   formik.touched.password &&
                   'border-rose-500'
-                } my-0 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
+                } my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3 pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
                 type={show.password ? 'text' : 'password'}
                 disabled={isLoading}
                 {...formik.getFieldProps('password')}
@@ -101,9 +101,9 @@ export default function UserRegisterForm() {
                 onClick={() => setShow({ ...show, password: !show.password })}
               >
                 {show.password ? (
-                  <Icons.eyeOpen className="h-6 w-6" />
+                  <Icons.eyeOpen className="h-6 w-6 bg-white" />
                 ) : (
-                  <Icons.eyeClosed className="h-6 w-6" />
+                  <Icons.eyeClosed className="h-6 w-6 bg-white" />
                 )}
               </span>
             </div>
@@ -126,7 +126,7 @@ export default function UserRegisterForm() {
                   formik.errors?.cpassword &&
                   formik.touched.cpassword &&
                   'border-rose-500'
-                } my-0 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
+                } my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3  pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
                 type={show.cpassword ? 'text' : 'password'}
                 disabled={isLoading}
                 {...formik.getFieldProps('cpassword')}
@@ -136,9 +136,9 @@ export default function UserRegisterForm() {
                 onClick={() => setShow({ ...show, cpassword: !show.cpassword })}
               >
                 {show.cpassword ? (
-                  <Icons.eyeOpen className="h-6 w-6" />
+                  <Icons.eyeOpen className="h-6 w-6 bg-white" />
                 ) : (
-                  <Icons.eyeClosed className="h-6 w-6" />
+                  <Icons.eyeClosed className="h-6 w-6 bg-white" />
                 )}
               </span>
             </div>

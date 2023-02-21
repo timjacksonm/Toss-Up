@@ -15,8 +15,8 @@ export function validateForm(values) {
 
   if (!values.password) {
     errors.password = 'Required';
-  } else if (values.password.length < 8 || values.password.length > 20) {
-    errors.password = 'Must be greater then 8 and less then 20 characters long';
+  } else if (values.password.length < 8) {
+    errors.password = 'Password must be greater then 8 characters';
   } else if (values.password.includes(' ')) {
     errors.password = 'Invalid password';
   }
@@ -39,14 +39,6 @@ export function validateLogin(values) {
     errors.username = 'Required';
   } else if (!/^[a-zA-Z0-9]{5,16}$/i.test(values.username)) {
     errors.username = 'Invalid username';
-  }
-
-  if (!values.password) {
-    errors.password = 'Required';
-  } else if (values.password.length < 8 || values.password.length > 20) {
-    errors.password = 'Must be greater then 8 and less then 20 characters long';
-  } else if (values.password.includes(' ')) {
-    errors.password = 'Invalid password';
   }
 
   return errors;
