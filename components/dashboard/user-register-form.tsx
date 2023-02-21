@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 export default function UserRegisterForm() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<string>();
+  const [show, setShow] = useState({ password: false, cpassword: false });
+  const [valid, setValid] = useState({ username: false, email: false });
 
   async function onSubmit() {
     setIsLoading(true);
@@ -21,62 +23,103 @@ export default function UserRegisterForm() {
             >
               Username
             </label>
-            <input
-              id="username"
-              className="my-0 mb-2 block h-9 w-full rounded-md border border-slate-300 py-2 px-3 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
-              type="text"
-              autoCapitalize="none"
-              autoCorrect="off"
-              name="username"
-              disabled={isLoading}
-              required
-            />
+            <div className="relative">
+              <input
+                id="username"
+                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                type="text"
+                name="username"
+                autoCapitalize="none"
+                autoCorrect="off"
+                required
+                disabled={isLoading}
+              />
+              <span className="absolute top-0 right-2 pt-2 pr-2">
+                {!valid.username ? (
+                  <Icons.user className="h-6 w-6" />
+                ) : (
+                  <Icons.userCheck className="h-6 w-6" />
+                )}
+              </span>
+            </div>
             <label
               className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               htmlFor="email"
             >
               Email
             </label>
-            <input
-              id="email"
-              placeholder="name@example.com"
-              className="my-0 mb-2 block h-9 w-full rounded-md border border-slate-300 py-2 px-3 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              name="email"
-              disabled={isLoading}
-              required
-            />
+            <div className="relative">
+              <input
+                id="email"
+                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                type="email"
+                autoCapitalize="none"
+                autoComplete="email"
+                autoCorrect="off"
+                name="email"
+                required
+                disabled={isLoading}
+              />
+              <span className="absolute top-0 right-2 pt-2 pr-2">
+                {!valid.username ? (
+                  <Icons.user className="h-6 w-6" />
+                ) : (
+                  <Icons.userCheck className="h-6 w-6" />
+                )}
+              </span>
+            </div>
             <label
               className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               htmlFor="password"
             >
               Password
             </label>
-            <input
-              id="password"
-              className="my-0 mb-2 block h-9 w-full rounded-md border border-slate-300 py-2 px-3 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
-              type="password"
-              name="password"
-              disabled={isLoading}
-              required
-            />
+            <div className="relative">
+              <input
+                id="password"
+                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                type={show.password ? 'text' : 'password'}
+                name="password"
+                required
+                disabled={isLoading}
+              />
+              <span
+                className="absolute top-0 right-2 cursor-pointer pt-2 pr-2"
+                onClick={() => setShow({ ...show, password: !show.password })}
+              >
+                {show.password ? (
+                  <Icons.eyeOpen className="h-6 w-6" />
+                ) : (
+                  <Icons.eyeClosed className="h-6 w-6" />
+                )}
+              </span>
+            </div>
             <label
               className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               htmlFor="passwordconfirmation"
             >
               Password confirmation
             </label>
-            <input
-              id="passwordconfirmation"
-              className="my-0 mb-2 block h-9 w-full rounded-md border border-slate-300 py-2 px-3 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
-              type="password"
-              name="passwordconfirmation"
-              disabled={isLoading}
-              required
-            />
+            <div className="relative">
+              <input
+                id="cpassword"
+                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                type={show.cpassword ? 'text' : 'password'}
+                name="cpassword"
+                required
+                disabled={isLoading}
+              />
+              <span
+                className="absolute top-0 right-2 cursor-pointer pt-2 pr-2"
+                onClick={() => setShow({ ...show, cpassword: !show.cpassword })}
+              >
+                {show.cpassword ? (
+                  <Icons.eyeOpen className="h-6 w-6" />
+                ) : (
+                  <Icons.eyeClosed className="h-6 w-6" />
+                )}
+              </span>
+            </div>
             {/* {errors?.email && (
               <p className="px-1 text-xs text-red-600">
                 {errors.email.message}

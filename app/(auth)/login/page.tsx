@@ -1,4 +1,4 @@
-import UserAuthForm from 'components/dashboard/user-auth-form';
+import UserAuthForm from 'components/dashboard/user-cred-form';
 import { Icons } from 'components/Icons/icons';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -27,15 +27,10 @@ export default async function LoginPage() {
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-bold">Welcome back</h1>
           <p className="text-sm text-slate-600">
-            Enter your email to sign in to your account
+            Enter your username and password
           </p>
         </div>
         <UserAuthForm />
-        <p className="flex flex-col px-8 text-center text-sm text-slate-600 hover:text-black">
-          <Link href="/login/form" className="underline">
-            {'Or you can signin manually instead.'}
-          </Link>
-        </p>
         <p className="text-center">
           {"Don't have an account? "}
           <Link
