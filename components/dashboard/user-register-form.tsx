@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import { validateForm } from 'lib/utils/validate';
 import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
 import { IFormValues } from 'lib/types/IFormValues';
+import { redBorderOnError } from 'utils/redBorderOnError';
 
 export default function UserRegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -83,11 +84,11 @@ export default function UserRegisterForm() {
             <div className="relative">
               <input
                 id="password"
-                className={`${
-                  formik.errors?.password &&
-                  formik.touched.password &&
-                  'border-rose-500'
-                } my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3 pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
+                className={
+                  redBorderOnError({ formik, name: 'password' }) +
+                  ' ' +
+                  'my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3 pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1'
+                }
                 type={show.password ? 'text' : 'password'}
                 disabled={isLoading}
                 {...formik.getFieldProps('password')}
@@ -103,11 +104,11 @@ export default function UserRegisterForm() {
                 )}
               </span>
             </div>
-            <p className="px-1 text-xs text-red-600">
-              {formik.errors?.password &&
-                formik.touched.password &&
-                formik.errors.password}
-            </p>
+            {formik.touched.password && (
+              <p className="px-1 text-xs text-red-600">
+                {formik.errors.password}
+              </p>
+            )}
 
             <label
               className="mt-2 block text-sm font-medium text-gray-700 dark:text-gray-200"
@@ -118,11 +119,11 @@ export default function UserRegisterForm() {
             <div className="relative">
               <input
                 id="cpassword"
-                className={`${
-                  formik.errors?.cpassword &&
-                  formik.touched.cpassword &&
-                  'border-rose-500'
-                } my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3  pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
+                className={
+                  redBorderOnError({ formik, name: 'cpassword' }) +
+                  ' ' +
+                  'my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3  pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1'
+                }
                 type={show.cpassword ? 'text' : 'password'}
                 disabled={isLoading}
                 {...formik.getFieldProps('cpassword')}
@@ -138,11 +139,11 @@ export default function UserRegisterForm() {
                 )}
               </span>
             </div>
-            <p className="px-1 text-xs text-red-600">
-              {formik.errors?.cpassword &&
-                formik.touched.cpassword &&
-                formik.errors.cpassword}
-            </p>
+            {formik.touched.cpassword && (
+              <p className="px-1 text-xs text-red-600">
+                {formik.errors.cpassword}
+              </p>
+            )}
           </div>
 
           <p className="mt-2 flex flex-col px-6 text-center text-sm text-slate-600 hover:text-black">
