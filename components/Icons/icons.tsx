@@ -21,6 +21,7 @@ import {
   Twitter,
   User,
   UserCheck,
+  UserX,
   X,
 } from 'lucide-react';
 import type { Icon as LucideIcon } from 'lucide-react';
@@ -45,6 +46,7 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   userCheck: UserCheck,
+  userX: UserX,
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,

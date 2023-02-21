@@ -2,19 +2,37 @@
 import { Icons } from 'components/Icons/icons';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useFormik } from 'formik';
+import { validateForm } from 'lib/utils/validate';
+import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
 
 export default function UserRegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<string>();
   const [show, setShow] = useState({ password: false, cpassword: false });
-  const [valid, setValid] = useState({ username: false, email: false });
 
-  async function onSubmit() {
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+      cpassword: '',
+    },
+    validate: validateForm,
+    onSubmit,
+  });
+
+  async function onSubmit(values: {
+    username: string;
+    email: string;
+    password: string;
+    cpassword: string;
+  }) {
+    console.log(values);
     setIsLoading(true);
   }
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <label
@@ -26,22 +44,18 @@ export default function UserRegisterForm() {
             <div className="relative">
               <input
                 id="username"
-                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                className={` my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
                 type="text"
-                name="username"
                 autoCapitalize="none"
                 autoCorrect="off"
-                required
                 disabled={isLoading}
+                {...formik.getFieldProps('username')}
               />
               <span className="absolute top-0 right-2 pt-2 pr-2">
-                {!valid.username ? (
-                  <Icons.user className="h-6 w-6" />
-                ) : (
-                  <Icons.userCheck className="h-6 w-6" />
-                )}
+                {getValidatedUserIcon(formik, 'username')}
               </span>
             </div>
+
             <label
               className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               htmlFor="email"
@@ -56,18 +70,14 @@ export default function UserRegisterForm() {
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect="off"
-                name="email"
-                required
                 disabled={isLoading}
+                {...formik.getFieldProps('email')}
               />
               <span className="absolute top-0 right-2 pt-2 pr-2">
-                {!valid.username ? (
-                  <Icons.user className="h-6 w-6" />
-                ) : (
-                  <Icons.userCheck className="h-6 w-6" />
-                )}
+                {getValidatedUserIcon(formik, 'email')}
               </span>
             </div>
+
             <label
               className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               htmlFor="password"
@@ -77,11 +87,14 @@ export default function UserRegisterForm() {
             <div className="relative">
               <input
                 id="password"
-                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                className={`${
+                  formik.errors?.password &&
+                  formik.touched.password &&
+                  'border-rose-500'
+                } my-0 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
                 type={show.password ? 'text' : 'password'}
-                name="password"
-                required
                 disabled={isLoading}
+                {...formik.getFieldProps('password')}
               />
               <span
                 className="absolute top-0 right-2 cursor-pointer pt-2 pr-2"
@@ -94,20 +107,29 @@ export default function UserRegisterForm() {
                 )}
               </span>
             </div>
+            <p className="px-1 text-xs text-red-600">
+              {formik.errors?.password &&
+                formik.touched.password &&
+                formik.errors.password}
+            </p>
+
             <label
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-              htmlFor="passwordconfirmation"
+              className="mt-2 block text-sm font-medium text-gray-700 dark:text-gray-200"
+              htmlFor="cpassword"
             >
               Password confirmation
             </label>
             <div className="relative">
               <input
                 id="cpassword"
-                className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
+                className={`${
+                  formik.errors?.cpassword &&
+                  formik.touched.cpassword &&
+                  'border-rose-500'
+                } my-0 block h-10 w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1`}
                 type={show.cpassword ? 'text' : 'password'}
-                name="cpassword"
-                required
                 disabled={isLoading}
+                {...formik.getFieldProps('cpassword')}
               />
               <span
                 className="absolute top-0 right-2 cursor-pointer pt-2 pr-2"
@@ -120,17 +142,19 @@ export default function UserRegisterForm() {
                 )}
               </span>
             </div>
-            {/* {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )} */}
+            <p className="px-1 text-xs text-red-600">
+              {formik.errors?.cpassword &&
+                formik.touched.cpassword &&
+                formik.errors.cpassword}
+            </p>
           </div>
-          <p className="flex flex-col px-6 text-center text-sm text-slate-600 hover:text-black">
+
+          <p className="mt-2 flex flex-col px-6 text-center text-sm text-slate-600 hover:text-black">
             <Link href="/" className="underline">
               By signing up, you agree to our terms of use.
             </Link>
           </p>
+
           <button
             className="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
             disabled={isLoading}
