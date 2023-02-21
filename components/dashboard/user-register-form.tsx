@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import { validateForm } from 'lib/utils/validate';
 import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
+import { IFormValues } from 'lib/types/IFormValues';
 
 export default function UserRegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,12 +22,7 @@ export default function UserRegisterForm() {
     onSubmit,
   });
 
-  async function onSubmit(values: {
-    username: string;
-    email: string;
-    password: string;
-    cpassword: string;
-  }) {
+  async function onSubmit(values: IFormValues) {
     console.log(values);
     setIsLoading(true);
   }
@@ -52,7 +48,7 @@ export default function UserRegisterForm() {
                 {...formik.getFieldProps('username')}
               />
               <span className="absolute top-0 right-2 pt-2 pr-2">
-                {getValidatedUserIcon(formik, 'username')}
+                {getValidatedUserIcon({ formik, name: 'username' })}
               </span>
             </div>
 
@@ -74,7 +70,7 @@ export default function UserRegisterForm() {
                 {...formik.getFieldProps('email')}
               />
               <span className="absolute top-0 right-2 pt-2 pr-2">
-                {getValidatedUserIcon(formik, 'email')}
+                {getValidatedUserIcon({ formik, name: 'email' })}
               </span>
             </div>
 

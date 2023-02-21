@@ -1,5 +1,9 @@
-export function validateForm(values) {
-  const errors = {};
+import { ILoginValues } from 'lib/types/ILoginValues';
+import { IFormValues } from 'lib/types/IFormValues';
+import { IFormikErrors } from 'lib/types/IFormikErrors';
+
+export function validateForm(values: IFormValues) {
+  const errors = <IFormikErrors>{};
 
   if (!values.username) {
     errors.username = 'Required';
@@ -32,8 +36,8 @@ export function validateForm(values) {
   return errors;
 }
 
-export function validateLogin(values) {
-  const errors = {};
+export function validateLogin(values: ILoginValues) {
+  const errors = <IFormikErrors>{};
 
   if (!values.username) {
     errors.username = 'Required';

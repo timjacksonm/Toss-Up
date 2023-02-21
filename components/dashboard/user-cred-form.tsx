@@ -1,6 +1,7 @@
 'use client';
 import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
 import { useFormik } from 'formik';
+import { ILoginValues } from 'lib/types/ILoginValues';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { validateLogin } from 'utils/validate';
@@ -10,7 +11,6 @@ import { Icons } from '../Icons/icons';
 export default function UserAuthForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const [validUsername, setValidUsername] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -21,7 +21,7 @@ export default function UserAuthForm() {
     onSubmit,
   });
 
-  async function onSubmit(values: { username: string; password: string }) {
+  async function onSubmit(values: ILoginValues) {
     console.log(values);
     setIsLoading(true);
   }
@@ -49,9 +49,10 @@ export default function UserAuthForm() {
                 {...formik.getFieldProps('username')}
               />
               <span className="absolute top-0 right-2 pt-2 pr-2">
-                {getValidatedUserIcon(formik, 'username')}
+                {getValidatedUserIcon({ formik, name: 'username' })}
               </span>
             </div>
+
             <label
               className="block text-sm font-medium text-gray-700 dark:text-gray-200"
               htmlFor="password"
@@ -78,13 +79,8 @@ export default function UserAuthForm() {
                 )}
               </span>
             </div>
-
-            {/* {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )} */}
           </div>
+
           <button
             className="inline-flex w-full items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
             disabled={isLoading}
