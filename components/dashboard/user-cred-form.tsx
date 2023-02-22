@@ -44,7 +44,6 @@ export default function UserAuthForm() {
                 type="username"
                 autoCapitalize="none"
                 autoCorrect="off"
-                required
                 disabled={isLoading}
                 {...formik.getFieldProps('username')}
               />
@@ -64,7 +63,6 @@ export default function UserAuthForm() {
                 id="password"
                 className="my-0 mb-2 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3 pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1"
                 type={show ? 'text' : 'password'}
-                required
                 disabled={isLoading}
                 {...formik.getFieldProps('password')}
               />

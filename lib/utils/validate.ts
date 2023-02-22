@@ -26,7 +26,7 @@ export function validateForm(values: IFormValues) {
   }
 
   if (!values.cpassword) {
-    // errors.cpassword = 'Required';
+    errors.cpassword = 'Required';
   } else if (values.password !== values.cpassword) {
     errors.cpassword = 'Confirmed password does not match';
   } else if (values.password.includes(' ')) {
