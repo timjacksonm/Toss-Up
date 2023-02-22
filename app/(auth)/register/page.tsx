@@ -1,8 +1,16 @@
 import UserRegisterForm from 'components/dashboard/user-register-form';
 import { Icons } from 'components/Icons/icons';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { pages } from 'utils/pages';
+import { getCurrentUser } from 'utils/session';
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const user = await getCurrentUser();
+
+  if (user) {
+    redirect(pages.dashboard);
+  }
   return (
     <div className='container flex h-screen w-screen flex-col items-center justify-center'>
       <Link
