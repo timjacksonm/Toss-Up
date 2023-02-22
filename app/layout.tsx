@@ -7,9 +7,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head />
-      <body className="flex justify-center bg-slate-600">
+      <body className='flex justify-center bg-slate-600'>
         <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
