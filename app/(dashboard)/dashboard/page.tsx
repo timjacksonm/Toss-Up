@@ -1,3 +1,4 @@
+"use client";
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import UserCard from './user-card';
@@ -6,6 +7,7 @@ import { pages } from 'utils/pages';
 import { UserAvatar } from 'components/dashboard/avatar';
 
 export default async function DashboardHome() {
+
   const user = await getCurrentUser();
 
   if (!user) {
