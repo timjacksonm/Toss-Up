@@ -21,7 +21,7 @@ export const authOptions: AuthOptions = {
       const { email_verified, email, given_name, family_name } =
         profile as ProfileExtended;
 
-      const user = await Users.findOne(email);
+      const user = await Users.findUser({ email });
 
       if (email_verified) {
         if (user) {
@@ -35,7 +35,7 @@ export const authOptions: AuthOptions = {
     async session({ session, user: { email } }) {
       const updatedSession = session as SessionExtended;
       if (email) {
-        const user = await Users.findOne(email);
+        const user = await Users.findUser({ email });
         updatedSession.user = {
           ...session.user,
           firstName: user?.firstName,

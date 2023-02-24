@@ -2,6 +2,16 @@ import { ILoginValues } from 'lib/types/ILoginValues';
 import { IFormValues } from 'lib/types/IFormValues';
 import { IFormikErrors } from 'lib/types/IFormikErrors';
 
+// This regex will match passwords that:
+
+// Are at least 8 characters long
+// Contain at least one lowercase letter
+// Contain at least one uppercase letter
+// Contain at least one digit
+// Contain at least one special character from the set @$!%*?&
+export const strongPasswordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 export function validateForm(values: IFormValues) {
   const errors = <IFormikErrors>{};
 
@@ -19,8 +29,19 @@ export function validateForm(values: IFormValues) {
 
   if (!values.password) {
     errors.password = 'Required';
-  } else if (values.password.length < 8) {
-    errors.password = 'Password must be greater then 8 characters';
+  } else if (!strongPasswordRegex.test(values.password)) {
+    if (values.password.length < 8) {
+      errors.password = 'Password must be at least 8 characters long';
+    } else if (!/[a-z]/.test(values.password)) {
+      errors.password = 'Password must contain at least one lowercase letter';
+    } else if (!/[A-Z]/.test(values.password)) {
+      errors.password = 'Password must contain at least one uppercase letter';
+    } else if (!/\d/.test(values.password)) {
+      errors.password = 'Password must contain at least one digit';
+    } else if (!/[@$!%*?&]/.test(values.password)) {
+      errors.password =
+        'Password must contain at least one special character from the set @$!%*?&';
+    }
   } else if (values.password.includes(' ')) {
     errors.password = 'Invalid password';
   }
