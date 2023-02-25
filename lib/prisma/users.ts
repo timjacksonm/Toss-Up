@@ -1,7 +1,7 @@
 import { prisma } from 'lib/prisma/prisma';
-import { ProfileExtended } from 'lib/types/IProfile';
 import bcrypt from 'bcrypt';
 import { IUserRequest } from 'lib/types/IUserRequest';
+import { IUserUpdates } from 'lib/types/IUserUpdates';
 
 const findUser = async (identifier: string) => {
   return await prisma.user.findFirst({
@@ -39,20 +39,22 @@ const findAllUsers = async (email?: string) => {
   });
 };
 
-const updateUser = async ({
-  email,
-  email_verified,
-  given_name,
-  family_name,
-}: ProfileExtended) => {
-  await prisma.user.update({
+const updateUser = async (id: string, updates: IUserUpdates) => {
+  return await prisma.user.update({
     where: {
-      email,
+      id,
     },
-    data: {
-      emailVerified: email_verified,
-      firstName: given_name,
-      lastName: family_name,
+    data: updates,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      emailVerified: true,
+      image: true,
+      createdAt: true,
+      lastModified: true,
     },
   });
 };
@@ -60,9 +62,12 @@ const updateUser = async ({
 const createUser = async (user: IUserRequest) => {
   const { email, username } = user;
 
-  const existingUser = await findUser({ email, name: username });
+  const [existingEmail, existingName] = await Promise.all([
+    findUser(email),
+    findUser(username),
+  ]);
 
-  if (existingUser) return null;
+  if (existingEmail || existingName) return null;
 
   const salt = bcrypt.genSaltSync(12);
   const hashedPassword = bcrypt.hashSync(user.password, salt);

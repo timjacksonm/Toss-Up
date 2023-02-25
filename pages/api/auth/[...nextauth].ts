@@ -2,7 +2,6 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from 'lib/prisma/prisma';
-import { Users } from 'lib/prisma/users';
 import { ProfileExtended } from 'lib/types/IProfile';
 import { SessionExtended } from 'lib/types/ISession';
 
@@ -21,12 +20,29 @@ export const authOptions: AuthOptions = {
       const { email_verified, email, given_name, family_name } =
         profile as ProfileExtended;
 
-      const user = await Users.findUser({ email });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${email}`
+      );
+      const [user] = await res.json();
 
       if (email_verified) {
         if (user) {
+          const { id } = user;
           const AuthProfile = profile as ProfileExtended;
-          await Users.updateUser(AuthProfile);
+          const userUpdates = {
+            email: AuthProfile?.email,
+            firstName: AuthProfile?.given_name,
+            lastName: AuthProfile?.family_name,
+            emailVerified: AuthProfile?.email_verified,
+          };
+          // Update User
+          await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/users/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userUpdates),
+          });
         }
         return true;
       }
@@ -34,14 +50,20 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, user: { email } }) {
       const updatedSession = session as SessionExtended;
+
       if (email) {
-        const user = await Users.findUser({ email });
-        updatedSession.user = {
-          ...session.user,
-          firstName: user?.firstName,
-          lastName: user?.lastName,
-          image: user?.image,
-        };
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${email}`
+        );
+        const [user] = await res.json();
+
+        //only adding id & createdAt to session state from db
+        if (user) {
+          updatedSession.user = {
+            ...session.user,
+            ...user,
+          };
+        }
       }
       return updatedSession;
     },
