@@ -3,15 +3,24 @@ import { ProfileExtended } from 'lib/types/IProfile';
 import bcrypt from 'bcrypt';
 import { IUserRequest } from 'lib/types/IUserRequest';
 
-const findUser = async ({ email, name }: { email: string; name?: string }) => {
+const findUser = async (identifier: string) => {
   return await prisma.user.findFirst({
     where: {
       OR: [
         {
-          email,
+          id: identifier,
         },
-        { name },
+        {
+          email: identifier,
+        },
+        { name: identifier },
       ],
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
     },
   });
 };
