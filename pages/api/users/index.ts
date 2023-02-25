@@ -21,7 +21,7 @@ export default async function usersHandler(
       if (error) {
         return res
           .status(400)
-          .json({ message: 'Invalid email query parameter' });
+          .json({ error: { message: error.message }, stack: error });
       }
 
       const users = await Users.findAllUsers(email);
@@ -31,7 +31,12 @@ export default async function usersHandler(
       res.setHeader('Allow', ['GET']);
       return res.status(405).end(`Method ${method} Not Allowed`);
     }
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({
+      error: {
+        message: error.message ?? 'Internal server error: api/auth/signup',
+      },
+    });
   }
 }

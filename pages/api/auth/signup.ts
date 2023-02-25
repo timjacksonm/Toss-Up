@@ -27,8 +27,9 @@ export default async function signupHandler(
       const { value: validatedUserData, error } = schema.validate(req.body);
 
       if (error) {
-        console.log(error);
-        return res.status(400).json({ error: error });
+        return res
+          .status(400)
+          .json({ error: { message: error.message }, stack: error });
       }
 
       const result = await Users.createUser(validatedUserData!);
