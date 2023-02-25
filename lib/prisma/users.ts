@@ -25,8 +25,11 @@ const findUser = async (identifier: string) => {
   });
 };
 
-const findAllUsers = async () => {
+const findAllUsers = async (email?: string) => {
   return await prisma.user.findMany({
+    where: {
+      ...(email ? { email } : {}),
+    },
     select: {
       id: true,
       name: true,
