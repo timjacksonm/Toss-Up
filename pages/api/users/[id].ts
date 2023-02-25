@@ -61,7 +61,7 @@ export default async function userByIdHandler(
         //Update password only
         res.status(501).json({ message: 'Reset password not yet supported' });
       } else {
-        //Throw away password & email. Don't want these updated here
+        //Throw away password & email. Don't want them updated here
         const { password, email, ...updates } = value;
         const updatedUser = await Users.updateUser(id, updates);
         return res.status(201).json(updatedUser);
