@@ -1,27 +1,40 @@
 import { prisma } from 'lib/prisma/prisma';
 import bcrypt from 'bcrypt';
-import { IUserRequest } from 'lib/types/IUserRequest';
+import { IUserCreate } from 'lib/types/IUserCreate';
 import { IUserUpdates } from 'lib/types/IUserUpdates';
+import { ObjectId } from 'mongodb';
+
+/**
+ * A safe and limited selection of fields to include in a Prisma query response.
+ * Suitable for returning non-sensitive data without exposing unnecessary information.
+ */
+const select = {
+  id: true,
+  name: true,
+  email: true,
+  createdAt: true,
+  lastModified: true,
+};
 
 const findUser = async (identifier: string) => {
+  if (ObjectId.isValid(identifier)) {
+    return await prisma.user.findFirst({
+      where: {
+        id: identifier,
+      },
+      select: select,
+    });
+  }
   return await prisma.user.findFirst({
     where: {
       OR: [
-        {
-          id: identifier,
-        },
         {
           email: identifier,
         },
         { name: identifier },
       ],
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      createdAt: true,
-    },
+    select: select,
   });
 };
 
@@ -30,12 +43,7 @@ const findAllUsers = async (email?: string) => {
     where: {
       ...(email ? { email } : {}),
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      createdAt: true,
-    },
+    select: select,
   });
 };
 
@@ -59,7 +67,7 @@ const updateUser = async (id: string, updates: IUserUpdates) => {
   });
 };
 
-const createUser = async (user: IUserRequest) => {
+const createUser = async (user: IUserCreate) => {
   const { email, username } = user;
 
   const [existingEmail, existingName] = await Promise.all([
@@ -77,12 +85,7 @@ const createUser = async (user: IUserRequest) => {
     data: {
       ...newUser,
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      createdAt: true,
-    },
+    select: select,
   });
   return createdUser;
 };

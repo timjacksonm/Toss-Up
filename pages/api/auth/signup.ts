@@ -2,9 +2,9 @@ import { Users } from 'lib/prisma/users';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Joi from 'joi';
 import { strongPasswordRegex } from 'utils/validate';
-import { IUserRequest } from 'lib/types/IUserRequest';
+import { IUserCreate } from 'lib/types/IUserCreate';
 
-const schema = Joi.object<IUserRequest>({
+const schema = Joi.object<IUserCreate>({
   username: Joi.string().trim().alphanum().min(5).max(16).required(),
   email: Joi.string()
     .email({
@@ -22,28 +22,30 @@ export default async function signupHandler(
   res: NextApiResponse
 ) {
   try {
-    const { method, body } = req;
+    const { method } = req;
+    if (method === 'POST') {
+      const { value: validatedUserData, error } = schema.validate(req.body);
 
-    if (method !== 'POST') {
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ error: error });
+      }
+
+      const user = await Users.createUser(validatedUserData!);
+
+      if (user) {
+        return res.status(201).json(user);
+      }
+
+      return res.status(409).json({
+        message:
+          'This email address has already been registered. Please use a different email or log in to your existing account.',
+      });
+    } else {
       res.setHeader('Allow', ['POST']);
       return res.status(405).end(`Method ${method} Not Allowed`);
     }
-
-    const { value: validatedUserData, error } = schema.validate(body);
-
-    if (error) {
-      console.log(error);
-      res.status(400).json({ error: error });
-    }
-
-    const user = await Users.createUser(validatedUserData!);
-
-    if (user) {
-      res.status(201).json(user);
-    }
-
-    res.status(409).json({ message: 'This email address has already been registered. Please use a different email or log in to your existing account.',});
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
