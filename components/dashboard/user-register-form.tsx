@@ -7,10 +7,14 @@ import { validateForm } from 'lib/utils/validate';
 import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
 import { IFormValues } from 'lib/types/IFormValues';
 import { redBorderOnError } from 'utils/redBorderOnError';
+import { pages } from 'utils/pages';
+import { useRouter } from 'next/navigation';
 
 export default function UserRegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState({ password: false, cpassword: false });
+  const [submissionError, setSubmissionError] = useState<string>();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -24,8 +28,26 @@ export default function UserRegisterForm() {
   });
 
   async function onSubmit(values: IFormValues) {
-    console.log(values);
     setIsLoading(true);
+
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    };
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/signup`,
+      options
+    );
+    const { error } = await res.json();
+
+    if (error) {
+      setSubmissionError(error.message);
+      setIsLoading(false);
+    }
+
+    router.push(pages.login);
   }
   return (
     <div>
@@ -143,6 +165,9 @@ export default function UserRegisterForm() {
               <p className='px-1 text-xs text-red-600'>
                 {formik.errors.cpassword}
               </p>
+            )}
+            {submissionError && (
+              <p className='px-1 text-xs text-red-600'>{submissionError}</p>
             )}
           </div>
 
