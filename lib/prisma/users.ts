@@ -16,6 +16,17 @@ const findUser = async ({ email, name }: { email: string; name?: string }) => {
   });
 };
 
+const findAllUsers = async () => {
+  return await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+    },
+  });
+};
+
 const updateUser = async ({
   email,
   email_verified,
@@ -59,5 +70,5 @@ const createUser = async (user: IUserRequest) => {
   return createdUser;
 };
 
-const Users = { findUser, updateUser, createUser };
+const Users = { findUser, findAllUsers, updateUser, createUser };
 export { Users };
