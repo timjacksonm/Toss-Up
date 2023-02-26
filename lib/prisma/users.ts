@@ -122,6 +122,7 @@ const createUser = async (user: IUserCreate) => {
     const createdUser = await prisma.user.create({
       data: {
         ...newUser,
+        emailVerified: false,
       },
       select: select,
     });
@@ -151,15 +152,17 @@ const checkUser = async ({
       },
       select: {
         password: true,
+        emailVerified: true,
       },
     });
 
-    if (user && user.password) {
-      const { password: passwordHash } = user;
-      const result = await bcrypt.compare(password, passwordHash);
-      return result;
-    }
-    return false;
+    if (!user) return false;
+
+    // if (user?.emailVerified === false) return null; TODO: #47 Setup BE to send email to confirm signup
+
+    const { password: passwordHash } = user;
+    const result = await bcrypt.compare(password, passwordHash!);
+    return result;
   } catch (error: any) {
     throw {
       message: 'Internal server error: Failed to verify user credentials',

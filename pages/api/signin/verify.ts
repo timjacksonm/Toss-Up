@@ -48,6 +48,14 @@ export default async function verifyHandler(
           },
         });
       }
+      if (verified === null) {
+        return res.status(403).json({
+          error: {
+            message:
+              'Email verification required. Please verify your email before logging in.',
+          },
+        });
+      }
     } else {
       res.setHeader('Allow', ['POST']);
       return res.status(405).end(`Method ${method} Not Allowed`);
