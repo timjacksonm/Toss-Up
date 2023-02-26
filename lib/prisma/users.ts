@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import { IUserCreate } from 'lib/types/IUserCreate';
 import { IUserUpdates } from 'lib/types/IUserUpdates';
 import { isValidObjectId } from 'utils/isValidObjectId';
-import { ObjectId } from 'mongodb';
 
 /**
  * A safe and limited selection of fields to include in a Prisma query response.
@@ -11,8 +10,9 @@ import { ObjectId } from 'mongodb';
  */
 const select = {
   id: true,
-  name: true,
+  username: true,
   email: true,
+  name: true,
   createdAt: true,
   lastModified: true,
 };
@@ -31,9 +31,17 @@ const findUser = async (identifier: string) => {
       where: {
         OR: [
           {
-            email: identifier,
+            email: {
+              contains: identifier,
+              mode: 'insensitive',
+            },
           },
-          { name: identifier },
+          {
+            username: {
+              contains: identifier,
+              mode: 'insensitive',
+            },
+          },
         ],
       },
       select: select,
@@ -71,8 +79,9 @@ const updateUser = async (id: string, updates: IUserUpdates) => {
       data: updates,
       select: {
         id: true,
-        name: true,
+        username: true,
         email: true,
+        name: true,
         firstName: true,
         lastName: true,
         emailVerified: true,
@@ -101,14 +110,14 @@ const createUser = async (user: IUserCreate) => {
     if (existingName || existingEmail)
       return {
         errors: {
-          existingName: existingName?.name,
+          existingName: existingName?.username,
           existingEmail: existingEmail?.email,
         },
       };
 
     const salt = bcrypt.genSaltSync(12);
     const hashedPassword = bcrypt.hashSync(user.password, salt);
-    const newUser = { name: username, email, password: hashedPassword };
+    const newUser = { username, email, password: hashedPassword };
 
     const createdUser = await prisma.user.create({
       data: {
@@ -125,5 +134,39 @@ const createUser = async (user: IUserCreate) => {
   }
 };
 
-const Users = { findUser, findAllUsers, updateUser, createUser };
+const checkUser = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        username: {
+          contains: username,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        password: true,
+      },
+    });
+
+    if (user && user.password) {
+      const { password: passwordHash } = user;
+      const result = await bcrypt.compare(password, passwordHash);
+      return result;
+    }
+    return false;
+  } catch (error: any) {
+    throw {
+      message: 'Internal server error: Failed to verify user credentials',
+      stack: error,
+    };
+  }
+};
+
+const Users = { findUser, findAllUsers, updateUser, createUser, checkUser };
 export { Users };
