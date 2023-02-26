@@ -3,9 +3,7 @@ import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
 import { useFormik } from 'formik';
 import { ILoginValues } from 'lib/types/ILoginValues';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { pages } from 'utils/pages';
 import { validateLogin } from 'utils/validate';
 import GoogleLogo from '../Icons/google';
 import { Icons } from '../Icons/icons';
@@ -13,8 +11,6 @@ import { Icons } from '../Icons/icons';
 export default function UserAuthForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const [submissionError, setSubmissionError] = useState<string>();
-  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -26,20 +22,8 @@ export default function UserAuthForm() {
   });
 
   async function onSubmit(values: ILoginValues) {
+    console.log(values);
     setIsLoading(true);
-    const status = await signIn('credentials', {
-      redirect: false,
-      username: values.username,
-      password: values.password,
-      callbackUrl: pages.dashboard,
-    });
-
-    // redirect is false so we don't redirect to dashboard on error
-    if (status?.ok) {
-      router.push(status.url!);
-    }
-    setSubmissionError(status?.error);
-    setIsLoading(false);
   }
 
   return (
@@ -94,10 +78,6 @@ export default function UserAuthForm() {
               </span>
             </div>
           </div>
-
-          {submissionError && (
-            <p className='px-1 text-xs text-red-600'>{submissionError}</p>
-          )}
 
           <button
             className='inline-flex w-full items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500'

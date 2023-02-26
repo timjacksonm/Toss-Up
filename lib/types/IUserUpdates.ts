@@ -1,7 +1,6 @@
 export interface IUserUpdates {
-  username?: string;
-  email?: string;
   name?: string;
+  email?: string;
   firstName?: string;
   lastName?: string;
   password?: string;

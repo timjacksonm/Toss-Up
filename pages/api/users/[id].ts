@@ -7,7 +7,7 @@ import { IUserUpdates } from 'lib/types/IUserUpdates';
 const idSchema = Joi.string().length(24).hex();
 
 const bodySchema = Joi.object<IUserUpdates>({
-  username: Joi.string().trim().alphanum().min(5).max(16),
+  name: Joi.string().trim().alphanum().min(5).max(16),
   firstName: Joi.string().pattern(/^[a-zA-Z]+$/),
   lastName: Joi.string().pattern(/^[a-zA-Z]+$/),
   password: Joi.string().pattern(strongPasswordRegex),
@@ -17,8 +17,7 @@ const bodySchema = Joi.object<IUserUpdates>({
       tlds: { allow: ['com', 'net', 'edu', 'org'] },
     })
     .required()
-    .trim()
-    .lowercase(),
+    .trim(),
   emailVerified: Joi.boolean(),
   image: Joi.string().uri(),
 });
@@ -68,7 +67,7 @@ export default async function userByIdHandler(
 
       if (Object.keys(value).length === 2 && value.password && value.email) {
         //Update password only
-        return res
+        res
           .status(501)
           .json({ error: { message: 'Reset password not yet supported' } });
       } else {

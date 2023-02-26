@@ -4,5 +4,6 @@ import { authOptions } from 'pages/api/auth/[...nextauth]';
 
 export async function getCurrentUser() {
   const session: SessionExtended | null = await getServerSession(authOptions);
+
   return session?.user;
 }
