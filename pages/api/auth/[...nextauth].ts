@@ -1,14 +1,41 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { AuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from 'lib/prisma/prisma';
 import { ProfileExtended } from 'lib/types/IProfile';
 import { SessionExtended } from 'lib/types/ISession';
+import { signIn } from 'next-auth/react';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   // Configure one or more authentication providers
   providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        username: { label: 'Username', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials, req) {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/signin/verify`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              username: credentials?.username,
+              password: credentials?.password,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+        const { error, ...user } = await res.json();
+        if (error) {
+          throw new Error(error.message);
+        }
+        return user;
+      },
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -17,14 +44,16 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ account, profile }) {
+      // No extra handling if signin with credentials. Already handled in CredentialsProvider above.
+      if (account?.type === 'credentials') {
+        return true;
+      }
       const { email_verified, email, given_name, family_name } =
         profile as ProfileExtended;
-
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${email}`
       );
       const [user] = await res.json();
-
       if (email_verified) {
         if (user) {
           const { id } = user;
@@ -48,16 +77,14 @@ export const authOptions: AuthOptions = {
       }
       return false;
     },
-    async session({ session, user: { email } }) {
-      const updatedSession = session as SessionExtended;
-
-      if (email) {
+    async session({ session }) {
+      const updatedSession = {} as SessionExtended;
+      if (session.user?.email) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${email}`
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${session.user?.email}`
         );
         const [user] = await res.json();
 
-        //only adding id & createdAt to session state from db
         if (user) {
           updatedSession.user = {
             ...session.user,
@@ -67,6 +94,9 @@ export const authOptions: AuthOptions = {
       }
       return updatedSession;
     },
+  },
+  session: {
+    strategy: 'jwt',
   },
 };
 

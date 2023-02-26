@@ -12,7 +12,8 @@ const schema = Joi.object<IUserCreate>({
       tlds: { allow: ['com', 'net', 'edu', 'org'] },
     })
     .required()
-    .trim(),
+    .trim()
+    .lowercase(),
   password: Joi.string().pattern(strongPasswordRegex).required(),
   cpassword: Joi.string().valid(Joi.ref('password')).required(),
 });
@@ -32,7 +33,7 @@ export default async function signupHandler(
           .json({ error: { message: error.message }, stack: error });
       }
 
-      const result = await Users.createUser(validatedUserData!);
+      const result = await Users.createUser(validatedUserData);
 
       if (result.errors?.existingName) {
         return res.status(409).json({
