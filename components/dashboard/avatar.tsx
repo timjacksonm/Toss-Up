@@ -30,7 +30,7 @@ export function UserAvatar({
         src={image ?? undefined}
       />
       <Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium">
-        {initials}
+        {initials ?? 'N/A'}
       </Avatar.Fallback>
     </Avatar.Root>
   );
