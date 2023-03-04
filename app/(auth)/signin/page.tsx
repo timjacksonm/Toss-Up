@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { pages } from 'utils/pages';
 import { getCurrentUser } from 'utils/session';
 
-export default async function LoginPage() {
+export default async function SigninPage() {
   const user = await getCurrentUser();
 
   if (user) {

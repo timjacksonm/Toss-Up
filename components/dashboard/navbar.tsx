@@ -1,5 +1,5 @@
 'use client';
-import { UserAvatar } from './dashboard/UserAvatar';
+import { UserAvatar } from './UserAvatar';
 
 export function NavBar() {
   return (

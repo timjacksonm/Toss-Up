@@ -47,7 +47,7 @@ export default function UserRegisterForm() {
       setIsLoading(false);
     }
 
-    router.push(pages.login);
+    router.push(pages.signin);
   }
   return (
     <div>
