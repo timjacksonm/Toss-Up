@@ -6,7 +6,7 @@ export default async function HomePage() {
       <div className='text-5xl text-green-400'>
         Welcome to my amazing website
       </div>
-      <Link className='text-5xl text-yellow-200' href='/login'>
+      <Link className='text-5xl text-yellow-200' href='/signin'>
         Login Page
       </Link>
       <Link className='text-5xl text-yellow-200' href='/register'>

@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <head />
-      <body className='flex justify-center bg-slate-600'>
+      <body className='bg-slate-600 px-40 py-3'>
         <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>

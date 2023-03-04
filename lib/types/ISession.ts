@@ -5,6 +5,7 @@ export interface SessionExtended extends Session {
     id?: string;
     email: string;
     username?: string;
+    initials?: string;
     firstName?: string;
     lastName?: string;
     name?: string;

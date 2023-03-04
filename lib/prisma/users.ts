@@ -12,6 +12,7 @@ const select = {
   id: true,
   username: true,
   email: true,
+  initials: true,
   name: true,
   createdAt: true,
   lastModified: true,

@@ -1,4 +1,4 @@
-import UserAuthForm from 'components/dashboard/user-cred-form';
+import UserSigninForm from 'components/dashboard/UserSigninForm';
 import { Icons } from 'components/Icons/icons';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -30,7 +30,7 @@ export default async function LoginPage() {
             Enter your username and password
           </p>
         </div>
-        <UserAuthForm />
+        <UserSigninForm />
         <p className='text-center'>
           {"Don't have an account? "}
           <Link
