@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Joi from 'joi';
-import { Users } from 'lib/prisma/users';
+import { ServerOnly } from 'lib/prisma/managers/serveronly';
+const { Users } = ServerOnly;
 
 interface ISignin {
   username: string;

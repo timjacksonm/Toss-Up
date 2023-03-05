@@ -1,6 +1,4 @@
 import { prisma } from 'lib/prisma/prisma';
-import bcrypt from 'bcrypt';
-import { IUserCreate } from 'lib/types/IUserCreate';
 import { IUserUpdates } from 'lib/types/IUserUpdates';
 import { isValidObjectId } from 'utils/isValidObjectId';
 
@@ -13,6 +11,8 @@ const select = {
   username: true,
   email: true,
   name: true,
+  firstName: true,
+  lastName: true,
   createdAt: true,
   lastModified: true,
 };
@@ -98,78 +98,5 @@ const updateUser = async (id: string, updates: IUserUpdates) => {
   }
 };
 
-const createUser = async (user: IUserCreate) => {
-  try {
-    const { email, username } = user;
-
-    const [existingName, existingEmail] = await Promise.all([
-      findUser(username),
-      findUser(email),
-    ]);
-
-    if (existingName || existingEmail)
-      return {
-        errors: {
-          existingName: existingName?.username,
-          existingEmail: existingEmail?.email,
-        },
-      };
-
-    const salt = bcrypt.genSaltSync(12);
-    const hashedPassword = bcrypt.hashSync(user.password, salt);
-    const newUser = { username, email, password: hashedPassword };
-
-    const createdUser = await prisma.user.create({
-      data: {
-        ...newUser,
-        emailVerified: false,
-      },
-      select: select,
-    });
-    return { user: createdUser };
-  } catch (error: any) {
-    throw {
-      message: 'Internal server error: Failed to create user',
-      stack: error,
-    };
-  }
-};
-
-const checkUser = async ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
-  try {
-    const user = await prisma.user.findFirst({
-      where: {
-        username: {
-          contains: username,
-          mode: 'insensitive',
-        },
-      },
-      select: {
-        password: true,
-        emailVerified: true,
-      },
-    });
-
-    if (!user) return false;
-
-    // if (user?.emailVerified === false) return null; TODO: #47 Setup BE to send email to confirm signup
-
-    const { password: passwordHash } = user;
-    const result = await bcrypt.compare(password, passwordHash!);
-    return result;
-  } catch (error: any) {
-    throw {
-      message: 'Internal server error: Failed to verify user credentials',
-      stack: error,
-    };
-  }
-};
-
-const Users = { findUser, findAllUsers, updateUser, createUser, checkUser };
+const Users = { findUser, findAllUsers, updateUser };
 export { Users };

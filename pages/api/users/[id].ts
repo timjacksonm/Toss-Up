@@ -1,4 +1,4 @@
-import { Users } from 'lib/prisma/users';
+import { Users } from 'lib/prisma/managers';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { strongPasswordRegex } from 'utils/validate';
 import Joi from 'joi';

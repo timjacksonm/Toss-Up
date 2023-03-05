@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 datasource db {
@@ -58,6 +59,27 @@ model User {
   sessions Session[]
 
   @@map("users")
+}
+
+model Question {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  optionA        String
+  optionB        String
+  mainTopic      String
+  subTopic       String
+  subSubTopic    String
+  subSubSubTopic String
+
+  @@map("questions")
+}
+
+model Topic {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  imgUrl      String?
+
+  @@map("topics")
 }
 
 model VerificationToken {

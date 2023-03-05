@@ -1,11 +1,11 @@
-import UserAuthForm from 'components/dashboard/user-cred-form';
+import UserSigninForm from 'components/dashboard/UserSigninForm';
 import { Icons } from 'components/Icons/icons';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { pages } from 'utils/pages';
 import { getCurrentUser } from 'utils/session';
 
-export default async function LoginPage() {
+export default async function SigninPage() {
   const user = await getCurrentUser();
 
   if (user) {
@@ -30,7 +30,7 @@ export default async function LoginPage() {
             Enter your username and password
           </p>
         </div>
-        <UserAuthForm />
+        <UserSigninForm />
         <p className='text-center'>
           {"Don't have an account? "}
           <Link

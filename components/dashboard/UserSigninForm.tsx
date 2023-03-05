@@ -1,16 +1,16 @@
 'use client';
 import { getValidatedUserIcon } from 'components/Icons/getValidatedUserIcon';
 import { useFormik } from 'formik';
-import { ILoginValues } from 'lib/types/ILoginValues';
+import { ISigninValues } from 'lib/types/ISigninValues';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { pages } from 'utils/pages';
-import { validateLogin } from 'utils/validate';
+import { validateSignin } from 'utils/validate';
 import GoogleLogo from '../Icons/google';
 import { Icons } from '../Icons/icons';
 
-export default function UserAuthForm() {
+export default function UserSigninForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [submissionError, setSubmissionError] = useState<string>();
@@ -21,11 +21,11 @@ export default function UserAuthForm() {
       username: '',
       password: '',
     },
-    validate: validateLogin,
+    validate: validateSignin,
     onSubmit,
   });
 
-  async function onSubmit(values: ILoginValues) {
+  async function onSubmit(values: ISigninValues) {
     setIsLoading(true);
     const status = await signIn('credentials', {
       redirect: false,

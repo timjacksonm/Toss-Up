@@ -1,4 +1,4 @@
-import { ILoginValues } from 'lib/types/ILoginValues';
+import { ISigninValues } from 'lib/types/ISigninValues';
 import { IFormValues } from 'lib/types/IFormValues';
 import { IFormikErrors } from 'lib/types/IFormikErrors';
 
@@ -57,7 +57,7 @@ export function validateForm(values: IFormValues) {
   return errors;
 }
 
-export function validateLogin(values: ILoginValues) {
+export function validateSignin(values: ISigninValues) {
   const errors = <IFormikErrors>{};
 
   if (!values.username) {
