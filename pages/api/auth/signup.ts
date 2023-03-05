@@ -1,8 +1,9 @@
-import { Users } from 'lib/prisma/users';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Joi from 'joi';
 import { strongPasswordRegex } from 'utils/validate';
 import { IUserCreate } from 'lib/types/IUserCreate';
+import { ServerOnly } from 'lib/prisma/managers/serveronly';
+const { Users } = ServerOnly;
 
 const schema = Joi.object<IUserCreate>({
   username: Joi.string().trim().alphanum().min(5).max(16).required(),

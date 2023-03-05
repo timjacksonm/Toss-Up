@@ -1,4 +1,4 @@
-import { Users } from 'lib/prisma/users';
+import { Users } from 'lib/prisma/managers';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Joi from 'joi';
 

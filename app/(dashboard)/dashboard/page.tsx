@@ -3,7 +3,7 @@ import { getCurrentUser } from 'utils/session';
 import { pages } from 'utils/pages';
 import { NavBar } from 'components/dashboard/navbar';
 import { TopicCard } from 'components/dashboard/TopicCard';
-import { Topics } from 'lib/prisma/topics';
+import { Topics } from 'lib/prisma/managers';
 
 export default async function DashboardHome() {
   const user = await getCurrentUser();

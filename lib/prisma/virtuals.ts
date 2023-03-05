@@ -1,4 +1,5 @@
 //A virtual is a property that is not stored in MongoDB. Virtuals are typically used for computed properties on documents.
+import { ProfileExtended } from 'lib/types/IProfile';
 import { prisma } from './prisma';
 
 /**

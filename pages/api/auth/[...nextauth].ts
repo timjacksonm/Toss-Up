@@ -5,7 +5,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from 'lib/prisma/prisma';
 import { ProfileExtended } from 'lib/types/IProfile';
 import { SessionExtended } from 'lib/types/ISession';
-import { signIn } from 'next-auth/react';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -84,11 +83,16 @@ export const authOptions: AuthOptions = {
           `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${session.user?.email}`
         );
         const [user] = await res.json();
+        let initials;
+        if (user.firstName && user.lastName) {
+          initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+        }
 
         if (user) {
           updatedSession.user = {
             ...session.user,
             ...user,
+            initials,
           };
         }
       }
