@@ -11,7 +11,11 @@ export function TopicDescription({
   if (!description) return <p>not available</p>;
 
   return (
-    <p className='flex flex-col font-normal text-gray-700 dark:text-gray-400'>
+    <p
+      className={`${
+        isExapnded && 'max-h-24 overflow-y-scroll'
+      } flex flex-col font-normal text-gray-700 dark:text-gray-400`}
+    >
       {description.length <= 100 && description}
       {description.length > 100 && (
         <>
