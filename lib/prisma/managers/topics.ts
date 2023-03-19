@@ -20,7 +20,7 @@ const findAllTopics = async () => {
         return { ...topic, questionCount: count };
       })
     );
-  } catch (error: any) {
+  } catch (error) {
     throw {
       message: 'Internal server error: Failed to find all topics',
       stack: error,

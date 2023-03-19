@@ -9,7 +9,7 @@ export interface SessionExtended extends Session {
     firstName?: string;
     lastName?: string;
     name?: string;
-    image?: string;
+    image?: string | null;
     createdAt?: string;
     lastModified?: string;
   };

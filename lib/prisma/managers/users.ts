@@ -46,7 +46,7 @@ const findUser = async (identifier: string) => {
       },
       select: select,
     });
-  } catch (error: any) {
+  } catch (error) {
     throw {
       message: 'Internal server error: Failed to find user',
       stack: error,
@@ -62,7 +62,7 @@ const findAllUsers = async (email?: string) => {
       },
       select: select,
     });
-  } catch (error: any) {
+  } catch (error) {
     throw {
       message: 'Internal server error: Failed to find all users',
       stack: error,
@@ -90,7 +90,7 @@ const updateUser = async (id: string, updates: IUserUpdates) => {
         lastModified: true,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     throw {
       message: 'Internal server error: Failed to update user',
       stack: error,

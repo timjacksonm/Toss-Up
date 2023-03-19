@@ -9,6 +9,7 @@ import { IFormValues } from 'lib/types/IFormValues';
 import { redBorderOnError } from 'utils/redBorderOnError';
 import { pages } from 'utils/pages';
 import { useRouter } from 'next/navigation';
+import { CustomError } from 'lib/types/CustomError';
 
 export default function UserRegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,10 +38,10 @@ export default function UserRegisterForm() {
     };
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/signup`,
+      `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/auth/signup`,
       options
     );
-    const { error } = await res.json();
+    const { error } = (await res.json()) as CustomError;
 
     if (error) {
       setSubmissionError(error.message);
@@ -107,7 +108,7 @@ export default function UserRegisterForm() {
               <input
                 id='password'
                 className={
-                  redBorderOnError({ formik, name: 'password' }) +
+                  `${redBorderOnError({ formik, name: 'password' }) || ''}` +
                   ' ' +
                   'my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3 pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1'
                 }
@@ -142,7 +143,7 @@ export default function UserRegisterForm() {
               <input
                 id='cpassword'
                 className={
-                  redBorderOnError({ formik, name: 'cpassword' }) +
+                  `${redBorderOnError({ formik, name: 'cpassword' }) || ''}` +
                   ' ' +
                   'my-0 block h-10 w-full rounded-md border border-slate-300 py-2 pl-3  pr-11 text-sm placeholder:text-slate-400 hover:border-slate-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1'
                 }

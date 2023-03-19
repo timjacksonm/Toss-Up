@@ -17,7 +17,7 @@ export function UserAvatar() {
         <Avatar
           status='online'
           alt='User settings'
-          img={user.image}
+          img={user.image ?? undefined}
           rounded={true}
           size='md'
           placeholderInitials={user.initials}
@@ -34,7 +34,7 @@ export function UserAvatar() {
       <Dropdown.Item>Leaderboards</Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item>
-        <button onClick={() => signOut({ callbackUrl: pages.home })}>
+        <button onClick={() => void signOut({ callbackUrl: pages.home })}>
           Sign out
         </button>
       </Dropdown.Item>

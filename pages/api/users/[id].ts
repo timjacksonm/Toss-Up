@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { strongPasswordRegex } from 'utils/validate';
 import Joi from 'joi';
 import { IUserUpdates } from 'lib/types/IUserUpdates';
+import { CustomError } from 'lib/types/CustomError';
 
 const idSchema = Joi.string().length(24).hex();
 
@@ -79,13 +80,14 @@ export default async function userByIdHandler(
       }
     } else {
       res.setHeader('Allow', ['GET', 'PUT']);
-      return res.status(405).end(`Method ${method} Not Allowed`);
+      return res.status(405).end(`Method ${method || ''} Not Allowed`);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
+    const { message } = error as CustomError;
     return res.status(500).json({
       error: {
-        message: error.message ?? 'Internal server error: api/auth/signup',
+        message: message ?? 'Internal server error: api/auth/signup',
       },
     });
   }

@@ -13,6 +13,7 @@ export function TopicDescription({
   return (
     <p
       className={`${
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         isExapnded && 'max-h-24 overflow-y-scroll'
       } flex flex-col font-normal text-gray-700 dark:text-gray-400`}
     >

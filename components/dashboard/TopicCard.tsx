@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { TopicDescription } from './TopicDescription';
 
 interface TopicCardProps {
-  title: string | null;
-  imgUrl: string | null;
-  description: string | null;
-  questionCount: number | null;
+  title: string;
+  imgUrl: string;
+  description: string;
+  questionCount: number;
 }
 
 export function TopicCard({
@@ -20,7 +20,7 @@ export function TopicCard({
       <div>
         <Image
           className='rounded-t-lg'
-          src={imgUrl!}
+          src={imgUrl}
           alt=''
           width={400}
           height={400}

@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Joi from 'joi';
 import { ServerOnly } from 'lib/prisma/managers/serveronly';
+import { CustomError } from 'lib/types/CustomError';
+
 const { Users } = ServerOnly;
 
 interface ISignin {
@@ -59,13 +61,14 @@ export default async function verifyHandler(
       }
     } else {
       res.setHeader('Allow', ['POST']);
-      return res.status(405).end(`Method ${method} Not Allowed`);
+      return res.status(405).end(`Method ${method || ''} Not Allowed`);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
+    const { message } = error as CustomError;
     return res.status(500).json({
       error: {
-        message: error.message ?? 'Internal server error: api/auth/signup',
+        message: message ?? 'Internal server error: api/auth/signup',
       },
     });
   }

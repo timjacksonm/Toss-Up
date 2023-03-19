@@ -8,6 +8,8 @@ import { Topics } from 'lib/prisma/managers';
 export default async function DashboardHome() {
   const user = await getCurrentUser();
 
+  console.log(user);
+
   if (!user) {
     redirect(pages.signin);
   }

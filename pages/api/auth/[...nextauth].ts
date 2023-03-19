@@ -5,6 +5,8 @@ import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from 'lib/prisma/prisma';
 import { ProfileExtended } from 'lib/types/IProfile';
 import { SessionExtended } from 'lib/types/ISession';
+import { CustomError } from 'lib/types/CustomError';
+import { IUser } from 'lib/types/IUser';
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -16,9 +18,9 @@ export const authOptions: AuthOptions = {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL}/api/signin/verify`,
+          `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/signin/verify`,
           {
             method: 'POST',
             body: JSON.stringify({
@@ -28,7 +30,10 @@ export const authOptions: AuthOptions = {
             headers: { 'Content-Type': 'application/json' },
           }
         );
-        const { error, ...user } = await res.json();
+        const { error, user } = (await res.json()) as {
+          error: CustomError;
+          user: IUser;
+        };
         if (error) {
           throw new Error(error.message);
         }
@@ -36,8 +41,8 @@ export const authOptions: AuthOptions = {
       },
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
     // ...add more providers here
   ],
@@ -47,12 +52,11 @@ export const authOptions: AuthOptions = {
       if (account?.type === 'credentials') {
         return true;
       }
-      const { email_verified, email, given_name, family_name } =
-        profile as ProfileExtended;
+      const { email_verified, email } = profile as ProfileExtended;
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${email}`
+        `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users?email=${email}`
       );
-      const [user] = await res.json();
+      const [user] = (await res.json()) as IUser[];
       if (email_verified) {
         if (user) {
           const { id } = user;
@@ -64,13 +68,16 @@ export const authOptions: AuthOptions = {
             emailVerified: AuthProfile?.email_verified,
           };
           // Update User
-          await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/users/${id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userUpdates),
-          });
+          await fetch(
+            `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users/${id}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(userUpdates),
+            }
+          );
         }
         return true;
       }
@@ -80,9 +87,11 @@ export const authOptions: AuthOptions = {
       const updatedSession = {} as SessionExtended;
       if (session.user?.email) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL}/api/users?email=${session.user?.email}`
+          `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users?email=${
+            session.user?.email
+          }`
         );
-        const [user] = await res.json();
+        const [user] = (await res.json()) as IUser[];
         let initials;
         if (user.firstName && user.lastName) {
           initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
