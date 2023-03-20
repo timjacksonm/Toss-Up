@@ -13,10 +13,7 @@
     "tsconfigRootDir": "./tsconfig.json"
   },
   "rules": {
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { "ignoreRestSiblings": true }
-    ],
+    "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }],
     "@typescript-eslint/restrict-template-expressions": "warn",
     "import/first": "error",
     "import/newline-after-import": "error",

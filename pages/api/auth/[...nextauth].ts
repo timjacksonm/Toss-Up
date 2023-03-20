@@ -19,17 +19,14 @@ export const authOptions: AuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/signin/verify`,
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              username: credentials?.username,
-              password: credentials?.password,
-            }),
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/signin/verify`, {
+          method: 'POST',
+          body: JSON.stringify({
+            username: credentials?.username,
+            password: credentials?.password,
+          }),
+          headers: { 'Content-Type': 'application/json' },
+        });
         const { error, user } = (await res.json()) as {
           error: CustomError;
           user: IUser;
@@ -53,9 +50,7 @@ export const authOptions: AuthOptions = {
         return true;
       }
       const { email_verified, email } = profile as ProfileExtended;
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users?email=${email}`
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users?email=${email}`);
       const [user] = (await res.json()) as IUser[];
       if (email_verified) {
         if (user) {
@@ -68,16 +63,13 @@ export const authOptions: AuthOptions = {
             emailVerified: AuthProfile?.email_verified,
           };
           // Update User
-          await fetch(
-            `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users/${id}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(userUpdates),
-            }
-          );
+          await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userUpdates),
+          });
         }
         return true;
       }
@@ -87,9 +79,7 @@ export const authOptions: AuthOptions = {
       const updatedSession = {} as SessionExtended;
       if (session.user?.email) {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users?email=${
-            session.user?.email
-          }`
+          `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/users?email=${session.user?.email}`
         );
         const [user] = (await res.json()) as IUser[];
         let initials;

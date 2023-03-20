@@ -9,22 +9,11 @@ interface TopicCardProps {
   questionCount: number;
 }
 
-export function TopicCard({
-  title,
-  imgUrl,
-  description,
-  questionCount,
-}: TopicCardProps) {
+export function TopicCard({ title, imgUrl, description, questionCount }: TopicCardProps) {
   return (
     <div className='flex max-w-sm flex-col justify-between rounded-lg border border-gray-200 bg-white pb-5 shadow dark:border-gray-700 dark:bg-gray-800'>
       <div>
-        <Image
-          className='rounded-t-lg'
-          src={imgUrl}
-          alt=''
-          width={400}
-          height={400}
-        />
+        <Image className='rounded-t-lg' src={imgUrl} alt='' width={400} height={400} />
         <div className='p-5'>
           <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>
             {title}

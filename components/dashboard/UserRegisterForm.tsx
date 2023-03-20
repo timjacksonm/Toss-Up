@@ -37,10 +37,7 @@ export default function UserRegisterForm() {
       body: JSON.stringify(values),
     };
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/auth/signup`,
-      options
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/auth/signup`, options);
     const { error } = (await res.json()) as CustomError;
 
     if (error) {
@@ -128,9 +125,7 @@ export default function UserRegisterForm() {
               </span>
             </div>
             {formik.touched.password && (
-              <p className='px-1 text-xs text-red-600'>
-                {formik.errors.password}
-              </p>
+              <p className='px-1 text-xs text-red-600'>{formik.errors.password}</p>
             )}
 
             <label
@@ -163,13 +158,9 @@ export default function UserRegisterForm() {
               </span>
             </div>
             {formik.touched.cpassword && (
-              <p className='px-1 text-xs text-red-600'>
-                {formik.errors.cpassword}
-              </p>
+              <p className='px-1 text-xs text-red-600'>{formik.errors.cpassword}</p>
             )}
-            {submissionError && (
-              <p className='px-1 text-xs text-red-600'>{submissionError}</p>
-            )}
+            {submissionError && <p className='px-1 text-xs text-red-600'>{submissionError}</p>}
           </div>
 
           <p className='mt-2 flex flex-col px-6 text-center text-sm text-slate-600 hover:text-black'>
@@ -182,9 +173,7 @@ export default function UserRegisterForm() {
             className='mt-6 inline-flex w-full items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500'
             disabled={isLoading}
           >
-            {isLoading && (
-              <Icons.spinner className='mr-2 h-4 w-4 animate-spin fill-white' />
-            )}
+            {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin fill-white' />}
             Sign up
           </button>
         </div>

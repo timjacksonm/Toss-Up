@@ -24,19 +24,14 @@ const bodySchema = Joi.object<IUserUpdates>({
   image: Joi.string().uri(),
 });
 
-export default async function userByIdHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function userByIdHandler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
   try {
     if (method === 'GET' && req.query.id) {
       const { error, value: id } = idSchema.validate(req.query.id);
 
       if (error) {
-        return res
-          .status(400)
-          .json({ error: { message: error.message }, stack: error });
+        return res.status(400).json({ error: { message: error.message }, stack: error });
       }
 
       const user = await Users.findUser(id);
@@ -44,9 +39,7 @@ export default async function userByIdHandler(
       if (user) {
         return res.status(200).json(user);
       } else {
-        return res
-          .status(404)
-          .json({ error: { message: `User with ID ${id} not found` } });
+        return res.status(404).json({ error: { message: `User with ID ${id} not found` } });
       }
     }
 
@@ -54,24 +47,18 @@ export default async function userByIdHandler(
       const { error: idError, value: id } = idSchema.validate(req.query.id);
 
       if (idError) {
-        return res
-          .status(400)
-          .json({ error: { message: idError.message }, stack: idError });
+        return res.status(400).json({ error: { message: idError.message }, stack: idError });
       }
 
       const { error: bodyError, value } = bodySchema.validate(req.body);
 
       if (bodyError) {
-        return res
-          .status(400)
-          .json({ error: { message: bodyError.message }, stack: bodyError });
+        return res.status(400).json({ error: { message: bodyError.message }, stack: bodyError });
       }
 
       if (Object.keys(value).length === 2 && value.password && value.email) {
         //Update password only
-        return res
-          .status(501)
-          .json({ error: { message: 'Reset password not yet supported' } });
+        return res.status(501).json({ error: { message: 'Reset password not yet supported' } });
       } else {
         //Throw away password & email. Don't want them updated here
         const { password, email, ...updates } = value;

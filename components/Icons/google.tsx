@@ -4,13 +4,7 @@ export interface GoogleProps extends Partial<SVGProps<SVGSVGElement>> {
   size?: string | number;
 }
 
-const GoogleLogo: FC<GoogleProps> = ({
-  className,
-  width,
-  height,
-  fill,
-  size,
-}) => (
+const GoogleLogo: FC<GoogleProps> = ({ className, width, height, fill, size }) => (
   <svg
     version='1.1'
     xmlns='http://www.w3.org/2000/svg'

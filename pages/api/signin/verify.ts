@@ -11,29 +11,18 @@ interface ISignin {
 }
 
 const schema = Joi.object<ISignin>({
-  username: Joi.string()
-    .trim()
-    .alphanum()
-    .min(5)
-    .max(16)
-    .required()
-    .lowercase(),
+  username: Joi.string().trim().alphanum().min(5).max(16).required().lowercase(),
   password: Joi.string().required(),
 });
 
-export default async function verifyHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function verifyHandler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
   try {
     if (method === 'POST') {
       const { error, value: loginInput } = schema.validate(req.body);
 
       if (error) {
-        return res
-          .status(400)
-          .json({ error: { message: error.message }, stack: error });
+        return res.status(400).json({ error: { message: error.message }, stack: error });
       }
 
       const verified = await Users.checkUser(loginInput);
@@ -54,8 +43,7 @@ export default async function verifyHandler(
       if (verified === null) {
         return res.status(403).json({
           error: {
-            message:
-              'Email verification required. Please verify your email before logging in.',
+            message: 'Email verification required. Please verify your email before logging in.',
           },
         });
       }

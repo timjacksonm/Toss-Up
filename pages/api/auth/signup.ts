@@ -21,19 +21,14 @@ const schema = Joi.object<IUserCreate>({
   cpassword: Joi.string().valid(Joi.ref('password')).required(),
 });
 
-export default async function signupHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function signupHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { method } = req;
     if (method === 'POST') {
       const { value: validatedUserData, error } = schema.validate(req.body);
 
       if (error) {
-        return res
-          .status(400)
-          .json({ error: { message: error.message }, stack: error });
+        return res.status(400).json({ error: { message: error.message }, stack: error });
       }
 
       const result = await Users.createUser(validatedUserData);

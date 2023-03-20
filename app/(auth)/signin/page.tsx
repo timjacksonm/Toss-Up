@@ -26,17 +26,12 @@ export default async function SigninPage() {
       <div className='mx-auto flex w-full flex-col justify-center space-y-6 rounded-md border bg-white p-8 sm:w-[400px]'>
         <div className='flex flex-col space-y-2 text-center'>
           <h1 className='text-2xl font-bold'>Welcome back</h1>
-          <p className='text-sm text-slate-600'>
-            Enter your username and password
-          </p>
+          <p className='text-sm text-slate-600'>Enter your username and password</p>
         </div>
         <UserSigninForm />
         <p className='text-center'>
           {"Don't have an account? "}
-          <Link
-            href='/register'
-            className='font-semibold text-blue-600 hover:underline'
-          >
+          <Link href='/register' className='font-semibold text-blue-600 hover:underline'>
             Sign Up
           </Link>
         </p>

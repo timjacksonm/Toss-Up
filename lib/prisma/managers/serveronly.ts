@@ -57,13 +57,7 @@ const createUser = async (user: IUserCreate) => {
   }
 };
 
-const checkUser = async ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
+const checkUser = async ({ username, password }: { username: string; password: string }) => {
   try {
     const user = await prisma.user.findFirst({
       where: {

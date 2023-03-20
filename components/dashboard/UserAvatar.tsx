@@ -34,9 +34,7 @@ export function UserAvatar() {
       <Dropdown.Item>Leaderboards</Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item>
-        <button onClick={() => void signOut({ callbackUrl: pages.home })}>
-          Sign out
-        </button>
+        <button onClick={() => void signOut({ callbackUrl: pages.home })}>Sign out</button>
       </Dropdown.Item>
     </Dropdown>
   );

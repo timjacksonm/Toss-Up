@@ -10,7 +10,5 @@ import { IFormikHelperProps } from 'lib/types/IFormikHelperProps';
  */
 export const redBorderOnError = (props: IFormikHelperProps) => {
   const { formik, name } = props;
-  return (
-    formik.errors[`${name}`] && formik.touched[`${name}`] && 'border-rose-500'
-  );
+  return formik.errors[`${name}`] && formik.touched[`${name}`] && 'border-rose-500';
 };

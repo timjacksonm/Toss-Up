@@ -11,19 +11,14 @@ const emailQuerySchema = Joi.object<IEmailQuery>({
   email: Joi.string().email(),
 });
 
-export default async function usersHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function usersHandler(req: NextApiRequest, res: NextApiResponse) {
   const { method, query } = req;
   try {
     if (method === 'GET') {
       const { error, value } = emailQuerySchema.validate(query);
 
       if (error) {
-        return res
-          .status(400)
-          .json({ error: { message: error.message }, stack: error });
+        return res.status(400).json({ error: { message: error.message }, stack: error });
       }
 
       const users = await Users.findAllUsers(value.email);
