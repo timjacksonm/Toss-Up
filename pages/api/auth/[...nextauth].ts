@@ -19,7 +19,7 @@ export const authOptions: AuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const res = await fetch('/api/signin/verify', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/signin/verify`, {
           method: 'POST',
           body: JSON.stringify({
             username: credentials?.username,
