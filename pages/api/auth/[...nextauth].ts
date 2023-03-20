@@ -19,14 +19,17 @@ export const authOptions: AuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/signin/verify`, {
-          method: 'POST',
-          body: JSON.stringify({
-            username: credentials?.username,
-            password: credentials?.password,
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        });
+        const res = await fetch(
+          'https://toss-up-git-eslint-timjacksonm.vercel.app/api/signin/verify',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              username: credentials?.username,
+              password: credentials?.password,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
         const { error, user } = (await res.json()) as {
           error: CustomError;
           user: IUser;
