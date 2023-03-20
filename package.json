@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "prisma generate",
-    "prepare": "husky install"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",

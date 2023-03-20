@@ -30,7 +30,7 @@ export default async function verifyHandler(req: NextApiRequest, res: NextApiRes
       if (verified === true) {
         // return safe user object
         const user = await Users.findUser(loginInput.username);
-        return res.status(200).json(user);
+        return res.status(200).json({ user });
       }
       if (verified === false) {
         return res.status(401).json({
