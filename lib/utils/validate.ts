@@ -39,8 +39,7 @@ export function validateForm(values: IFormValues) {
     } else if (!/\d/.test(values.password)) {
       errors.password = 'Password must contain at least one digit';
     } else if (!/[@$!%*?&]/.test(values.password)) {
-      errors.password =
-        'Password must contain at least one special character from the set @$!%*?&';
+      errors.password = 'Password must contain at least one special character from the set @$!%*?&';
     }
   } else if (values.password.includes(' ')) {
     errors.password = 'Invalid password';

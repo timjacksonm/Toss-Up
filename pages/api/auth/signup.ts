@@ -3,6 +3,8 @@ import Joi from 'joi';
 import { strongPasswordRegex } from 'utils/validate';
 import { IUserCreate } from 'lib/types/IUserCreate';
 import { ServerOnly } from 'lib/prisma/managers/serveronly';
+import { CustomError } from 'lib/types/CustomError';
+
 const { Users } = ServerOnly;
 
 const schema = Joi.object<IUserCreate>({
@@ -19,19 +21,14 @@ const schema = Joi.object<IUserCreate>({
   cpassword: Joi.string().valid(Joi.ref('password')).required(),
 });
 
-export default async function signupHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function signupHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { method } = req;
     if (method === 'POST') {
       const { value: validatedUserData, error } = schema.validate(req.body);
 
       if (error) {
-        return res
-          .status(400)
-          .json({ error: { message: error.message }, stack: error });
+        return res.status(400).json({ error: { message: error.message }, stack: error });
       }
 
       const result = await Users.createUser(validatedUserData);
@@ -57,13 +54,14 @@ export default async function signupHandler(
       return res.status(201).json(result.user);
     } else {
       res.setHeader('Allow', ['POST']);
-      return res.status(405).end(`Method ${method} Not Allowed`);
+      return res.status(405).end(`Method ${method || ''} Not Allowed`);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
+    const { message } = error as CustomError;
     return res.status(500).json({
       error: {
-        message: error.message ?? 'Internal server error: api/auth/signup',
+        message: message ?? 'Internal server error: api/auth/signup',
       },
     });
   }

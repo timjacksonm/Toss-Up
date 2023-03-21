@@ -36,7 +36,7 @@ export default function UserSigninForm() {
 
     // redirect is false so we don't redirect to dashboard on error
     if (status?.ok) {
-      router.push(status.url!);
+      router.push(status.url ?? pages.dashboard);
     }
     setSubmissionError(status?.error);
     setIsLoading(false);
@@ -95,17 +95,13 @@ export default function UserSigninForm() {
             </div>
           </div>
 
-          {submissionError && (
-            <p className='px-1 text-xs text-red-600'>{submissionError}</p>
-          )}
+          {submissionError && <p className='px-1 text-xs text-red-600'>{submissionError}</p>}
 
           <button
             className='inline-flex w-full items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500'
             disabled={isLoading}
           >
-            {isLoading && (
-              <Icons.spinner className='mr-2 h-4 w-4 animate-spin fill-white' />
-            )}
+            {isLoading && <Icons.spinner className='mr-2 h-4 w-4 animate-spin fill-white' />}
             Sign In
           </button>
         </div>
@@ -122,7 +118,9 @@ export default function UserSigninForm() {
         type='button'
         className='inline-flex w-full items-center justify-center rounded-lg border bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500'
         onClick={() =>
-          signIn('google', { callbackUrl: 'http://localhost:3000/dashboard' })
+          void signIn('google', {
+            callbackUrl: 'http://localhost:3000/dashboard',
+          })
         }
         disabled={isLoading}
       >

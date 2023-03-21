@@ -49,7 +49,7 @@ const createUser = async (user: IUserCreate) => {
       select: select,
     });
     return { user: createdUser };
-  } catch (error: any) {
+  } catch (error) {
     throw {
       message: 'Internal server error: Failed to create user',
       stack: error,
@@ -57,13 +57,7 @@ const createUser = async (user: IUserCreate) => {
   }
 };
 
-const checkUser = async ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
+const checkUser = async ({ username, password }: { username: string; password: string }) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
@@ -83,9 +77,11 @@ const checkUser = async ({
     // if (user?.emailVerified === false) return null; TODO: #47 Setup BE to send email to confirm signup
 
     const { password: passwordHash } = user;
-    const result = await bcrypt.compare(password, passwordHash!);
-    return result;
-  } catch (error: any) {
+    if (passwordHash) {
+      const result = await bcrypt.compare(password, passwordHash);
+      return result;
+    }
+  } catch (error) {
     throw {
       message: 'Internal server error: Failed to verify user credentials',
       stack: error,
