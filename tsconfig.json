@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,18 +21,10 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "utils/*": [
-        "lib/utils/*"
-      ],
-      "styles/*": [
-        "styles/*"
-      ],
-      "components/*": [
-        "components/*"
-      ],
-      "lib/types/*": [
-        "lib/types/*"
-      ]
+      "utils/*": ["lib/utils/*"],
+      "styles/*": ["styles/*"],
+      "components/*": ["components/*"],
+      "lib/types/*": ["lib/types/*"]
     }
   },
   "include": [
@@ -52,7 +40,5 @@
     "utils/**/*",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -7,6 +7,7 @@ module.exports = {
     'plugin:tailwindcss/recommended',
     'prettier',
   ],
+  ignorePatterns: ['.eslintrc.js'],
   plugins: ['@typescript-eslint', 'jsx-a11y', 'import'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
