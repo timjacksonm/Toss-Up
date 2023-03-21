@@ -37,6 +37,7 @@ export const authOptions: AuthOptions = {
         if (error) {
           throw new Error(error.message);
         }
+        console.log(user);
         return user;
       },
     }),
