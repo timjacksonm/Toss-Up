@@ -4,7 +4,7 @@ const nextConfig = {
     tsconfigPath: './tsconfig.json',
   },
   eslint: {
-    dirs: ['pages', 'components', 'app', 'styles'],
+    dirs: ['pages', 'components', 'app', 'styles', 'lib'],
   },
   experimental: {
     appDir: true,
