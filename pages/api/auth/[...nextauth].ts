@@ -71,6 +71,7 @@ export const authOptions: AuthOptions = {
             },
             body: JSON.stringify(userUpdates),
           });
+          return true;
         }
         return true;
       }
