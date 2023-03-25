@@ -2,12 +2,11 @@ name: CI
 
 on:
   push:
-    branches:
-      - '*'
-  pull_request_target:
-    types: [merged]
-    branches:
+    branches-ignore:
       - main
+  pull_request:
+    types:
+      - closed
 
 jobs:
   typecheck-and-lint:
