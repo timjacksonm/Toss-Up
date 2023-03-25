@@ -22,22 +22,22 @@ jobs:
         with:
           version: 7.30.3
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: cache-dependencies
-        with:
-          path: |
-            ~/.pnpm-store
-          key: ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+      # - name: Cache dependencies
+      #   uses: actions/cache@v2
+      #   id: cache-dependencies
+      #   with:
+      #     path: |
+      #       ~/.pnpm-store
+      #     key: ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-build-
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Print cache size
-        run: du -sh ~/.pnpm-store
-        # Print the size of the pnpm store cache directory, so that you can keep track of the cache size and avoid exceeding GitHub's cache size limits
+      # - name: Print cache size
+      #   run: du -sh ~/.pnpm-store
+      # Print the size of the pnpm store cache directory, so that you can keep track of the cache size and avoid exceeding GitHub's cache size limits
 
       - name: Typecheck
         run: pnpm run typecheck
