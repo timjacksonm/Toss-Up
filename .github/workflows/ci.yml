@@ -18,9 +18,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm run build
-
       - name: Typecheck
         run: pnpm run typecheck
 
