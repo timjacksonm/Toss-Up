@@ -1,6 +1,8 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   build:
@@ -22,19 +24,21 @@ jobs:
           echo "CACHE_KEY=$CACHE_KEY"
           pnpm install --frozen-lockfile
 
-        - uses: actions/cache@v2
-          with:
-            path: |
-              ~/.pnpm-store
-              ~/.pnpm-cache
-            key: ${{ env.CACHE_KEY }}
-            restore-keys: |
-              ${{ runner.os }}-pnpm-
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pnpm-store
+            ~/.pnpm-cache
+          key: ${{ env.CACHE_KEY }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
-        - name: Typecheck
-          run: pnpm run typecheck
-        - name: Lint
-          run: pnpm run lint
-        - name: Print cache size
-          run: du -sh ~/.pnpm-store
-          # Print the size of the pnpm store cache directory, so that you can keep track of the cache size and avoid exceeding GitHub's cache size limits
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Print cache size
+        run: du -sh ~/.pnpm-store
+        # Print the size of the pnpm store cache directory, so that you can keep track of the cache size and avoid exceeding GitHub's cache size limits
