@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  typecheck and lint:
+  typecheck-and-lint:
     runs-on: ubuntu-latest
 
     steps:
