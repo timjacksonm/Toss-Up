@@ -1,4 +1,4 @@
-name: CI / typecheck and lint
+name: CI
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  build:
+  typecheck and lint:
     runs-on: ubuntu-latest
 
     steps:
