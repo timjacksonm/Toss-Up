@@ -1,12 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches-ignore:
-      - main
-  pull_request:
-    types:
-      - closed
+on: push
 
 jobs:
   typecheck-and-lint:
