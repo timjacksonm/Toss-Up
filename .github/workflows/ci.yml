@@ -1,4 +1,4 @@
-name: CI
+name: CI / typecheck and lint
 
 on:
   push:
